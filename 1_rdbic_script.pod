@@ -10,12 +10,12 @@ instant CRUD access to databases via built-in web server.
 L<RapidApp> is a relatively new extension to L<Catalyst> for quickly creating
 rich and interactive user-interfaces, primarily using ExtJS, with a focus on 
 database-driven applications. L<RapidApp> also provides its own suite of helpers
-to bootstrap new applications which which work out-of-the-box.
+to bootstrap new applications which work out-of-the-box.
 
 To showcase some of these capabilities, L<RapidApp> also now ships with the 
 utility script L<rdbic.pl> which wraps the RapidDbic helper trait to generate
 and run a fully-working CRUD application on-the-fly with a single command and
-single connect info (DSN) argument. 
+single L<DBI> connect info (dsn) argument. 
 
 =head1 Installation
 
@@ -33,7 +33,8 @@ be supplied is the DBI connect arguments for the database, such as:
   rdbic.pl dbi:mysql:dbname,dbuser,dbpass
 
 The DSN argument is a hybrid connect info with the username and password (if
-required) appended with commas  as shown above(no spaces).
+required) appended with commas as shown above (note there are no spaces after 
+the commas).
 
 Connections which do not require a user/pass, such as SQLite, can be specified
 simply as:
@@ -41,7 +42,7 @@ simply as:
   rdbic.pl dbi:SQLite:/path/to/sqlt_file.db
 
 As an extra convenience, when connecting to an SQLite database, the argument can
-be supplied as simply the path to the database file:
+be supplied as a simple file-system the path to the database file:
 
   rdbic.pl /path/to/sqlt_file.db
 
@@ -67,7 +68,9 @@ The L<rdbic.pl> script provides an easy introduction to L<RapidApp> and taste
 of the kinds of interfaces which RapidApp facilitates, but is also a useful
 and convenient utility on its own.
 
-To learn more about the extensive L<RapidApp> project ...
+In the next article we will look at L<Plack::App::RapidApp::rDbic> which is
+the module used internally by L<rdbic.pl> and can be used and mounted 
+independently within a Plack-based setup. 
 
 =head1 Author
 
