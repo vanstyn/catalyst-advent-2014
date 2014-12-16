@@ -2,24 +2,24 @@
 
 =head1 Overview
 
-MVC is a proven development pattern and its rules and best practices are certainly worthwhile.
-But, still sometimes you just want to get at C<$c> when you're outside of controller code, and 
-you don't want to fuss with ACCEPT_CONTEXT, passing it around in argument lists, and so on. Isn't
-there an easier way? The answer is yes, read on...
+MVC is a proven development pattern, and its rules and best practices are certainly worthwhile.
+Still, sometimes you just want to get at C<$c> from the outside of controller code, and 
+don't want to fuss with ACCEPT_CONTEXT, passing it around in argument lists, and so on. 
+
+Isn't there an easier way? There is! read on...
 
 
-=head1 My solution - stuff $c in a localized global
+=head1 stuff $c in a localized global
 
 Sometimes you just need a global variable. By making use of the
 L<local|http://perldoc.perl.org/functions/local.html> keyword, global variables can be used in a 
 safe and consistent manner and be a part of good design. We're going to use this technique to 
-"localize" a reference $c to be globally accessible, but only within the appropriate scope.
+"localize" a reference to C<$c> to be globally accessible, but only within the appropriate scope.
 
 First, we need to declare a package/global variable someplace. Your main app class is a 
 good choice (as shown below), but it could be anywhere.
 
  package MyApp;
- 
  use Catalyst;
  
  # ...
@@ -39,25 +39,27 @@ Which is exactly equivalent to:
 Now we just need to hook into the right place to capture C<$c> and localize it into our global 
 variable. 
 
-The C<dispatch()> method is the obvious choice. It is called immediately after $c is constructed
-by C<prepare()> and is the gatekeeper for each request. All the processing that happens during a 
-normal request cycle is ultimately contained within the lexical scope of the C<dispatch()> method. 
+The Catalyst C<dispatch()> method provides the obvious choice. It is called immediately after $c 
+is constructed by C<prepare()> and is the gatekeeper for each request. All the processing that 
+happens during a normal request cycle is ultimately contained within the lexical scope of the 
+C<dispatch()> method.
+
 We can wrap this logic very easily with an around modifier and localize our variable:
 
  around 'dispatch' => sub {
    my ($orig, $c, @args) = @_;
-   local $__CTX = $c;
+   local $__ACTIVE_CTX = $c;
    $c->$orig(@args)
  };
 
 Now, throughout your application you will be able to access the context object simply by calling
-C<< MyApp->ctx >> which will work within any code that gets called during a request. This includes 
-Models, but also other general perl packages/modules that you may call out to, such as DBIC result 
-classes.
+C<< MyApp->ctx >> which will work within any code in any class so long as it is called during a 
+request. This includes Models, but also other general perl packages/modules that you may call out 
+to, such as L<DBIC|DBIx::Class> result classes.
 
 =head1 Outside of a request
 
-Since Catalyst is a web framework, most code is generally expected to be called during a request, 
+Since L<Catalyst> is a web framework, most code is generally expected to be called during a request, 
 but not always. There are plenty of other possible scenarios, such as admin scripts, cron jobs, etc
 that won't touch the dispatch machinery. For these cases, our C<< ->ctx() >> method will simply 
 return C<undef> since that is what we set it to when we declared it. By using C<local> to set the 
@@ -69,8 +71,8 @@ ceases to exist.
 This provides a high degree of confidence that our C<< ->ctx() >> method will always return the 
 correct context object when a request is in progress, and false/undef when it is not.
 
-You should always handle both cases with conditional logic, even if you only expect to be called
-during a request. For example:
+In your code, you should always handle both cases with conditional logic, even if you only expect 
+to be called during a request. For instance:
 
 
  if ( my $c = MyApp->ctx ) {
