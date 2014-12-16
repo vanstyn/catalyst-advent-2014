@@ -14,7 +14,7 @@ a built-in web server:
   rdbic.pl dbi:mysql:mydb,root,''
 
 Internally, this starts a PSGI application using L<Plack::App::RapidApp::rDbic>
-which does the heavy lifting. The above rdbic.pl is roughly equivalent to the following 
+which does the heavy lifting. The above rdbic.pl command is roughly equivalent to the following 
 (which could be specified in a .psgi file and started with L<plackup>):
 
   use Plack::App::RapidApp::rDbic;
@@ -54,7 +54,7 @@ You can also supply an already connected schema object:
   })->to_app;
 
 
-This makes it possible to do things like exposing the rDbic a CRUD interface 
+This makes it possible to do things like exposing the rDbic CRUD interface 
 within the structure of an existing Catalyst or PSGI app, such as:
 
   use MyCatApp;
