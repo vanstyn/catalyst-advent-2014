@@ -56,7 +56,7 @@ normalization (copied from L<RapidApp> code base):
 Keep in mind that this is only a I<simulated> public redispatch because the idea of 
 a I<real> redispatch - without a real request - doesn't actually make sense. You can't 
 know the result of a request that didn't happen just like you can't know if 
-Schrödinger's cat is still alive without opening the box.
+Schrodinger's cat is still alive without opening the box.
 
 Before using this code, you should take a step back and ask yourself if you actually 
 really need it. There is a good chance the better solution is to rethink the aspects 
