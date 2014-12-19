@@ -12,7 +12,7 @@ Isn't there an easier way to just DWIW when I'm in a hurry?
 =head1 stuff $c in a localized global
 
 Sometimes you just need a global variable. By making use of the
-L<local|http://perldoc.perl.org/functions/local.html> keyword, a global 
+L<local|http://perldoc.perl.org/functions/local.html> keyword, global 
 variables can be isolated to a particular scope. We're going to 
 use this technique to "localize" a reference to C<$c> to be globally accessible, but only within 
 the scope of the request it applies to.
