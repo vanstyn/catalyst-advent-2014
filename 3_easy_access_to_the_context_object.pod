@@ -100,7 +100,7 @@ exception you'll get if you simply assume you're in a request and blindly try to
 This should be filed under the category of "quick and dirty" and is still not recommended to be
 your first design choice. It is handy for getting stuff working quickly and in a pinch.
 
-Also, note that this will B<not> work under async scenarios -- only when you are deploying
+Also, note that this should B<not> be expected to work under async scenarios -- only when you are deploying
 with standard synchronous worker threads.
 
 
